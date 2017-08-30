@@ -7,6 +7,9 @@ var bodyParser = require('body-parser');
 var process = require('process');
 var fs = require('fs');
 
+// database connection config
+var dbconfig = require('./config.json');
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
@@ -42,7 +45,7 @@ var mailNotification = function(level, tracerData){
 // tracer log config
 var logLevel ;
 
-var logFile = process.env.LOGFILE ? process.env.LOGFILE : './lms.log';
+var logFile = process.env.LOGFILE ? process.env.LOGFILE : './node_visitor.log';
 var mode = process.env.mode ? process.env.mode : 'development';
 app.set('env', mode);
 
@@ -100,14 +103,10 @@ Object.keys(db2options).forEach(function(key){
 */
 
 // mysql DB pool
-var MYSQLHOST = process.env.MYSQLHOST ? process.env.MYSQLHOST : "LMSDEV";
+var MYSQLHOST = process.env.MYSQLHOST ? process.env.MYSQLHOST : "DEVDB";
 global.logger.info("MYSQLHOST : %s",MYSQLHOST);
-global.mySQLpool   = require('mysql').createPool(dbconfig.MYSQL[MYSQLHOST]);  
+global.mySQLpool   = require('mysql').createPool(dbconfig.MYSQL[MYSQLHOST]);   
 //
-
-
-
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
