@@ -10,12 +10,9 @@ var fs = require('fs');
 // database connection config
 var dbconfig = require('./config.json');
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 236d4e9a3450fda2a27ccd2e9435a93b6dda03a2
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var getUser = require('./routes/getUser');
 
 var app = express();
 
@@ -89,6 +86,11 @@ var logTracer = tracer.console(
 ); 
 
 global.logger = logTracer;	
+
+global.usermapWithJAMOCHO = [
+	{USER_NM:'류건우', USER_CHO:'ㄹ,ㄱ,ㅇ', USER_NM_JAMO:'ㄹㅠㄱㅓㄴㅇㅜ', CO_NM:'SBS'}
+]
+
 //
 
 // security setting
@@ -126,6 +128,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/getUser', getUser);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>SBS Infra Team Visitor Management System</title>
+  <meta name="description" content="visitor">
+  <meta name="author" content="ryuken01">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="../css/normalize.css">
+  <link rel="stylesheet" href="../css/skeleton.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/jquery-ui.min.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+</head>
+<body>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="container title">
+    <div class="section header">
+      <h3> SBS 유지보수 내역관리 </h3>
+    </div>
+  </div>
+
+  <div class="container">
+    <h6 id="today">2017년 08월30일 오후 8시20분</h6>
+  </div>
+
+   <div class="container">
+    <!-- The above form looks like this -->
+    <form>
+    <div class="row">
+        <div class="three columns">
+          <label for="name">Name</label>
+          <input class="u-full-width" type="text" placeholder="이름" id="engName">
+        </div>
+        <div class="three columns">
+          <label for="company">Company</label>
+          <input class="u-full-width" type="text" placeholder="회사명" id="compNM">
+        </div>
+        <div class="three columns">
+          <label for="startTime">Start</label>
+          <input class="u-full-width" type="text" placeholder="시작시간" id="startTime">
+        </div>     
+        <div class="three columns">
+          <label for="endTime">End</label>
+          <input class="u-full-width" type="text" placeholder="종료시간" id="endTime">
+        </div>               
+    </div>
+    <div class="row">
+      <div class="nine columns">
+        <label for="task">Task</label>
+        <textarea class="u-full-width" placeholder="작업내역" id="task"></textarea>
+      </div>
+      <div class="three columns">
+        <label for="submit">제출</label>
+        <input class="button-primary u-full-width" type="button" value="Submit" id="submit">
+      </div>
+    </div>
+  </div>
+
+  <div class="container">  
+    <table class="u-full-width">
+    <thead>
+        <tr>
+        <th>Name</th>
+        <th>Company</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Task</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>류건우</td>
+          <td>SBS</td>
+          <td>2017-08-30 20:38</td>
+          <td>2017-08-30 20:50</td>
+          <td>WISE 시스템 작업입니다. tmax, DB점검</td>
+        </tr>
+        <tr>
+          <td>류건우</td>
+          <td>SBS</td>
+          <td>2017-08-30 20:38</td>
+          <td>2017-08-30 20:50</td>
+          <td>WISE 시스템 작업입니다. tmax, DB점검</td>
+        </tr>        
+    </tbody>
+    </table>
+  </div>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script src="/js/d3.min.js"></script>
+  <script src="/js/jquery-2.2.3.min.js"></script>
+  <script src="/js/jquery-ui.min.js"></script>
+  <script src="/js/index.js"></script>  
+</body>
+</html>
