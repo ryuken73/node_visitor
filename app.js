@@ -10,6 +10,10 @@ var fs = require('fs');
 // database connection config
 var dbconfig = require('./config.json');
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 236d4e9a3450fda2a27ccd2e9435a93b6dda03a2
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
