@@ -7,6 +7,10 @@ var bodyParser = require('body-parser');
 var process = require('process');
 var fs = require('fs');
 
+// database connection config
+var dbconfig = require('./config.json');
+
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
