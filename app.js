@@ -96,7 +96,7 @@ global.usermapWithJAMOCHO = [
 // security setting
 app.use(helmet());
 
-/* ibm DB2 pool
+//ibm DB2 pool
 var DB2HOST = process.env.DB2HOST ? process.env.DB2HOST : "SBSDEV";
 global.logger.info("DB2HOST : %s",DB2HOST);
 var Pool = require('ibm_db').Pool;
@@ -106,7 +106,7 @@ global.db2cn = '';
 Object.keys(db2options).forEach(function(key){
 	global.db2cn +=  key + '=' + db2options[key] + ';' ;
 });
-*/
+//
 
 // mysql DB pool
 var MYSQLHOST = process.env.MYSQLHOST ? process.env.MYSQLHOST : "DEVDB";
