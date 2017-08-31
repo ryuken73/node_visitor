@@ -4,6 +4,8 @@ var extractJAMO = require('../util/extractJAMO');
 var extractCHO = require('../util/extractCHO');
 var _ = require('lodash');
 var Hangul = require('hangul-js');
+var getEngInfo = require('../functions/getEngInfo');
+var mkCachedList = require('../functions/mkCachedList');
 
 router.get('/search/:pattern', function(req, res, next) {
 	
@@ -12,14 +14,13 @@ router.get('/search/:pattern', function(req, res, next) {
 	var jamo = extractJAMO(req.params.pattern);
 	var cho = extractCHO(req.params.pattern);
 	global.logger.trace('%s',jamo);
-    global.logger.trace('%j',global.usermapWithJAMOCHO)
 
 	var userObj = _.filter(global.usermapWithJAMOCHO, function(obj){
-		return obj.USER_NM.includes(req.params.pattern); 
+		return obj.CRGR_NM.includes(req.params.pattern); 
 	});
 	
 	var userObjJAMO = _.filter(global.usermapWithJAMOCHO, function(obj){
-		return obj.USER_NM_JAMO.startsWith(jamo) ;
+		return obj.CRGR_NM.startsWith(jamo) ;
 	});
 	
 	var processed = 0;
@@ -53,5 +54,20 @@ router.get('/search/:pattern', function(req, res, next) {
 	res.send(userObj);
 	
 }); 
+
+router.get('/refreshEngList', function(req, res, next) {
+	global.usermapWithJAMOCHO = [];
+	(getEngInfo.get(req,res))()
+	.then(mkCachedList)
+    .then(function(result){
+		//res.send({result:'OK'})
+		res.send(global.usermapWithJAMOCHO);
+	})
+	.then(null, function(err){
+		global.logger.error(err);
+		res.send('error')
+	})
+
+});
 
 module.exports = router;

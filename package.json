@@ -12,11 +12,13 @@
     "express": "~4.13.1",
     "hangul-js": "^0.2.4",
     "helmet": "^3.8.1",
+    "ibm_db": "^2.1.0",
     "jade": "~1.11.0",
     "lodash": "^4.17.4",
     "morgan": "~1.6.1",
     "mysql": "^2.14.1",
     "nodemailer": "^4.0.1",
+    "q": "^1.5.0",
     "serve-favicon": "^2.3.2",
     "tracer": "^0.8.11"
   }
