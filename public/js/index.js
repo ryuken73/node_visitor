@@ -52,12 +52,21 @@ Date.prototype.getMidnightString = function(date){
 // END Help function
 
 // set initial search begin and end date
-var searchDate = new Date();
-var beginD = searchDate.getTodayString(searchDate);
-var endD = searchDate.getTomorrowString(searchDate);
-$('#search_begind').val(beginD);
-$('#search_endd').val(endD);
+function initDate() {
+    var startT = new Date();
+    var ISOTime = startT.toISOString(startT);
+    $('#startTime').val(ISOTime);
+    $('#endTime').val(ISOTime);
+}
 //
+
+function initSearchDay(){
+    var searchDate = new Date();
+    var beginD = searchDate.getTodayString(searchDate);
+    var endD = searchDate.getTomorrowString(searchDate);
+    $('#search_begind').val(beginD);
+    $('#search_endd').val(endD);
+}
 
 // Search Event
 d3.select('#search').on('click', function(){
@@ -70,7 +79,6 @@ d3.select('#search').on('click', function(){
 // no row id => then insert
 d3.select('#submit').on('click', function(){
     // check id and name from sbsdb
-    alert('submit');
     var params = getFieldValue();
 
     validateField(params)
@@ -81,6 +89,7 @@ d3.select('#submit').on('click', function(){
     .then(function(result){
         console.log('insert success')
         getHistory(redrawTable);
+        clearFieldValue();
         console.log(result);
     })
     .then(null, function(err){
@@ -99,6 +108,12 @@ function getFieldValue(){
     result.END_DTTM = $('#endTime').val();
     result.TASK = $('#task').val();
     return result;
+}
+
+function clearFieldValue(){
+    $('#engName').val('');
+    $('#compNM').val('');
+    initDate();
 }
 
 function validateField(params) {
@@ -208,9 +223,31 @@ var attachEventEnableAutoComplete = function(){
     })
 }
 
+initSearchDay();
 disableAutoComplete();  // initially disable auto complete
 attachEventEnableAutoComplete(); // enable autocomplete when keyup event occur
+addClickEvtOnTbody();
 getHistory(redrawTable);
+
+function addClickEvtOnTbody(){
+    $('#history_table tbody').on('click','tr td img',function(){
+        alert('delete : ' + $(this).attr('history_id'));
+        var historyID = $(this).attr('history_id')
+        delHistory(this, historyID);
+    });
+}
+
+function delHistory(element, id){
+    $.ajax({
+        'url' : /delData/ + id,
+        'method' : 'GET',
+        'success' : function(){
+            getHistory(redrawTable);
+        }
+    })
+
+}
+
 
 // get History function 
 
@@ -250,9 +287,10 @@ function redrawTable(historyData){
         var startT = '<td>' + data.SRT_DTTM + '</td>';
         var endT = '<td>' + data.END_DTTM + '</td>';
         var task = '<td>' + data.TASK + '</td>'
+        var delIcon = '<td><img class="delHistory" history_id=' + data.HISTORY_ID + ' src="/images/glyphicons-208-remove.png"></img></td>'
         var end = '</tr>'
-        var entry = head + name + comp + startT + endT + task + end;
-        tbody.append(entry);
+        var entry = head + name + comp + startT + endT + task + delIcon + end;
+        tbody.append(entry)
     })
 }
 

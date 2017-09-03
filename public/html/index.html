@@ -40,7 +40,7 @@
   </div>
 
   <div class="container">
-    <h6>현재시간 : <span id="today">2017년 08월30일 오후 8시20분</span><a href="#"> refresh</a><span></span></h6>
+    <h6>현재시간 : <span id="today"></h6>
   </div>
 
    <div class="container">
@@ -48,8 +48,8 @@
     <div class="row">
         <div class="two columns">
           <label for="name">Name</label>
-          <input class="u-full-width" type="text" placeholder="이름" id="engName">
-        </div>
+          <input class="u-full-width" type="text" placeholder="이름" id="engName"></input>
+        </div>          
         <div class="two columns">
           <label for="company">Company</label>
           <input class="u-full-width" type="text" placeholder="회사명" id="compNM" disabled>
@@ -61,6 +61,10 @@
         <div class="three columns">
           <label for="endTime">End</label>
           <input class="u-full-width" type="text" placeholder="종료시간" id="endTime">
+        </div>
+        <div class="one column">
+          <label for="refresh">Refresh</label>
+          <img src="/images/glyphicons-82-refresh.png" id="refreshEng">
         </div>               
     </div>
     <div class="row">
@@ -99,7 +103,7 @@
   </div>        
 
   <div class="container">
-    <table class="u-full-width">
+    <table id="history_table" class="u-full-width">
     <thead>
         <tr>
         <th>Name</th>
@@ -107,24 +111,10 @@
         <th>Start</th>
         <th>End</th>
         <th>Task</th>
-
+        <th>Delete</th>
         </tr>
     </thead>
-    <tbody>
-        <tr>
-          <td>류건우</td>
-          <td>SBS</td>
-          <td>2017-08-30 20:38</td>
-          <td>2017-08-30 20:50</td>
-          <td>WISE 시스템 작업입니다. tmax, DB점검</td>
-        </tr>
-        <tr>
-          <td>류건우</td>
-          <td>SBS</td>
-          <td>2017-08-30 20:38</td>
-          <td>2017-08-30 20:50</td>
-          <td>WISE 시스템 작업입니다. tmax, DB점검</td>
-        </tr>        
+    <tbody>      
     </tbody>
     </table>
   </div>

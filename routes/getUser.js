@@ -20,7 +20,7 @@ router.get('/search/:pattern', function(req, res, next) {
 	});
 	
 	var userObjJAMO = _.filter(global.usermapWithJAMOCHO, function(obj){
-		return obj.CRGR_NM.startsWith(jamo) ;
+		return obj.CRGR_NM_JAMO.startsWith(jamo) ;
 	});
 	
 	var processed = 0;
@@ -36,9 +36,9 @@ router.get('/search/:pattern', function(req, res, next) {
 			
 			if(processed === pattern.length){
 				userObjCHO = _.filter(global.usermapWithJAMOCHO, function(obj){
-					var chosung = obj.USER_CHO ;
+					var chosung = obj.CRGR_NM_CHO ;
 					if(chosung)	{
-						return obj.USER_CHO.startsWith(cho) ;
+						return obj.CRGR_NM_CHO.startsWith(cho) ;
 					}else{
 						return false;
 					}
