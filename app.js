@@ -13,6 +13,9 @@ var dbconfig = require('./config.json');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var getUser = require('./routes/getUser');
+var chkData = require('./routes/chkData');
+var setData = require('./routes/setData');
+var getData = require('./routes/getData');
 
 var app = express();
 
@@ -20,6 +23,7 @@ var app = express();
 var helmet = require('helmet');
 
 // error level의 오류가 발생하는 경우 메일 발송을 위한 setting
+/*
 var notification = require('./lib/notification');
 var mail = notification.mail('smtp://10.10.16.77'); // sbs.co.kr mail 서버
 var mailNotification = function(level, tracerData){	
@@ -42,7 +46,7 @@ var mailNotification = function(level, tracerData){
 		});
 	}
 };
-
+*/
 // tracer log config
 var logLevel ;
 
@@ -78,7 +82,7 @@ var logTracer = tracer.console(
 						console.log(data.output);
 					},
 					function(data){
-						mailNotification('error', data);
+						//mailNotification('error', data);
 					}
 					
 				]
@@ -88,7 +92,7 @@ var logTracer = tracer.console(
 global.logger = logTracer;	
 
 global.usermapWithJAMOCHO = [
-	{USER_NM:'류건우', USER_CHO:'ㄹ,ㄱ,ㅇ', USER_NM_JAMO:'ㄹㅠㄱㅓㄴㅇㅜ', CO_NM:'SBS'}
+	{CRGR_NM:'류건우', CRGR_NM_CHO:'ㄹ,ㄱ,ㅇ', CRGR_NM_JAMO:'ㄹㅠㄱㅓㄴㅇㅜ', CO_NM:'SBS'}
 ]
 
 //
@@ -129,6 +133,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 app.use('/getUser', getUser);
+app.use('/chkData', chkData);
+app.use('/setData', setData);
+app.use('/getData', getData);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

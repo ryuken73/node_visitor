@@ -14,6 +14,20 @@ exports.getISOString = function(date){
 	return date.toISOString(date);
 }
 
+exports.getMidnightString = function(date){
+	var year = date.getFullYear();
+	var month = padZero(date.getMonth() + 1);
+	var day = padZero(date.getDate());
+	return year+'-'+month+'-'+day+' '00:00:00';
+}
+
+exports.getMidnightEndString = function(date){
+	var year = date.getFullYear();
+	var month = padZero(date.getMonth() + 1);
+	var day = padZero(date.getDate());
+	return year+'-'+month+'-'+day+' '23:59:59';
+}
+
 Date.prototype.toDateString = function(date){
 
 	var year = date.getFullYear();

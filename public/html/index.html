@@ -40,25 +40,19 @@
   </div>
 
   <div class="container">
-    <h6>현재시간 : <span id="today">2017년 08월30일 오후 8시20분</span></h6>
+    <h6>현재시간 : <span id="today">2017년 08월30일 오후 8시20분</span><a href="#"> refresh</a><span></span></h6>
   </div>
-
-  <div class="container">
-    <h6>Refresh Engineer Info</h6>
-  </div>
-
 
    <div class="container">
     <!-- The above form looks like this -->
-    <form>
     <div class="row">
-        <div class="three columns">
+        <div class="two columns">
           <label for="name">Name</label>
           <input class="u-full-width" type="text" placeholder="이름" id="engName">
         </div>
-        <div class="three columns">
+        <div class="two columns">
           <label for="company">Company</label>
-          <input class="u-full-width" type="text" placeholder="회사명" id="compNM">
+          <input class="u-full-width" type="text" placeholder="회사명" id="compNM" disabled>
         </div>
         <div class="three columns">
           <label for="startTime">Start</label>
@@ -70,18 +64,41 @@
         </div>               
     </div>
     <div class="row">
-      <div class="nine columns">
+      <div class="seven columns">
         <label for="task">Task</label>
         <textarea class="u-full-width" placeholder="작업내역" id="task"></textarea>
       </div>
       <div class="three columns">
-        <label for="submit">제출</label>
+        <label for="submit">저장</label>
         <input class="button-primary u-full-width" type="button" value="Submit" id="submit">
       </div>
     </div>
   </div>
 
   <div class="container">  
+
+  </div>
+   <div class="container">  
+      <hr>
+  </div>
+  <div class="container">  
+    <div class="row">
+        <div class="three columns">
+          <input class="u-full-width" type="text" placeholder="이름,회사,작업" id="keyword">
+        </div>     
+        <div class="two columns">
+          <input class="u-full-width" type="text" placeholder="시작일" id="search_begind">
+        </div>    
+        <div class="two columns">
+          <input class="u-full-width" type="text" placeholder="종료일" id="search_endd">
+        </div>      
+        <div class="three columns">
+          <input class="button-primary u-full-width" type="button" value="검색" id="search">
+        </div> 
+    </div>
+  </div>        
+
+  <div class="container">
     <table class="u-full-width">
     <thead>
         <tr>
@@ -111,7 +128,6 @@
     </tbody>
     </table>
   </div>
-
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <script src="/js/d3.min.js"></script>

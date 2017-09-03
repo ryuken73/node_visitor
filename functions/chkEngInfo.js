@@ -3,14 +3,15 @@ var Q = require('q');
 var ibmdb = require('../lib/ibmdb');
 var _ = require('lodash');
 
-exports.get = function(req,res){
+exports.validate = function(req,res){
     return function(){
-        
-        global.logger.info('start getEngInfo start');
-        var def = Q.defer();
 
+        global.logger.info('start chkEngInfo start');
+
+        var def = Q.defer();
+        /*
         ibmdb.getConnection(req,res)
-        .then(getEngListFromDB2(req,res))
+        .then(chkEngInfoFromDB2(req,res))
         .then(function(result){
             def.resolve(result);
         })
@@ -21,23 +22,25 @@ exports.get = function(req,res){
         .done(function(){
             ibmdb.delConnection(req);
         })
-
+        */
+        def.resolve(true);
         return def.promise;
     }
 }
 
-function getEngListFromDB2(req,res){
+function chkEngInfoFromDB2(req,res){
     return function(conn){
 
         var def = Q.defer();
-        ibmdb.executeSQL(req,"select E.CRGR_NM,C.CO_NM from MAT.F_CORPR_CO_CRGR_TBL E, MAT.F_CORPR_CO_TBL C where E.del_yn='N' and C.CO_SRL_NO=E.CO_SRL_NO",[])
+        ibmdb.executeSQL(req,"select E.CRGR_NM,C.CO_NM + \
+                              from MAT.F_CORPR_CO_CRGR_TBL E, MAT.F_CORPR_CO_TBL C + \
+                              where E.del_yn='N' and C.CO_SRL_NO=E.CO_SRL_NO + \
+                              and E.CRGR_NM = ? and E.CRGR_ID = ? and C.CO_NM = ?", [req.query.CRGR_NM, req.query.CRGR_ID,req.query.CO_NM])
         .then(function(data){
             if(data.length > 0){
-                var dataTrimmed = _.map(data, function(engInfo){
-                                      engInfo.CO_NM = engInfo.CO_NM.trimRight();
-                                      return engInfo;
-                                 });
-                def.resolve(dataTrimmed);                    
+                def.resolve(true);                    
+            } else {
+                def.reject('engineer info not found in DB2 : %j', req.query);
             }
         })
         .then(null, function(err){
