@@ -30,7 +30,7 @@ function deleteHistory(req, res){
         
         var def = Q.defer();
         //mysqldb.executeSQL(req, 'delete from sbs.visit_history_tbl where history_id = ?',req.params.id)
-        mysqldb.executeSQL(req, 'update sbs.visit_history_tbl set del_yn="Y" where history_id = ?',req.params.id)
+        mysqldb.executeSQL(req, 'update visit_history_tbl set del_yn="Y" where history_id = ?',req.params.id)
         .then(function(result){
             global.logger.trace('delete success %j', result);
             def.resolve(result);
