@@ -1,5 +1,5 @@
 var Q = require('q');
-var _ = require('lodash');
+var _ = require('lodash'); 
 var extractJAMO = require('../util/extractJAMO');
 var extractCHO = require('../util/extractCHO');
 
@@ -12,8 +12,8 @@ module.exports = function(sqlResult){
     _.forEach(sqlResult,function(engInfo){
         var jamo = extractJAMO(engInfo.CRGR_NM);
         var cho  = extractCHO(engInfo.CRGR_NM);
-        engInfo.CGGR_NM_JAMO = jamo;
-        engInfo.CGGR_NM_CHO = cho;
+        engInfo.CRGR_NM_JAMO = jamo;
+        engInfo.CRGR_NM_CHO = cho;
         global.usermapWithJAMOCHO.push(engInfo);
         processed ++;
         if(processed === sqlResult.length){

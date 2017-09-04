@@ -7,6 +7,8 @@ var Hangul = require('hangul-js');
 var getEngInfo = require('../functions/getEngInfo');
 var mkCachedList = require('../functions/mkCachedList');
 
+
+// autocomplete 처리
 router.get('/search/:pattern', function(req, res, next) {
 	
 	global.logger.trace('%s',req.params.pattern);
@@ -14,6 +16,8 @@ router.get('/search/:pattern', function(req, res, next) {
 	var jamo = extractJAMO(req.params.pattern);
 	var cho = extractCHO(req.params.pattern);
 	global.logger.trace('%s',jamo);
+	// jamo : input pattern jamo, cho : input pattern cho
+
 
 	var userObj = _.filter(global.usermapWithJAMOCHO, function(obj){
 		return obj.CRGR_NM.includes(req.params.pattern); 
@@ -23,7 +27,7 @@ router.get('/search/:pattern', function(req, res, next) {
 		return obj.CRGR_NM_JAMO.startsWith(jamo) ;
 	});
 	
-	var processed = 0;
+	var processed = 0; 
 	var userObjCHO = [];
 
 	for ( var i = 0 ; i < pattern.length ; i++ ) {
@@ -55,6 +59,7 @@ router.get('/search/:pattern', function(req, res, next) {
 	
 }); 
 
+//DB2에서 engineer와 company정보 가져오기
 router.get('/refreshEngList', function(req, res, next) {
 	global.usermapWithJAMOCHO = [];
 	(getEngInfo.get(req,res))()

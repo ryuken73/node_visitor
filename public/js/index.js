@@ -294,4 +294,18 @@ function redrawTable(historyData){
     })
 }
 
+//
+
+// refresh engInfo event attachEventEnableAutoComplete
+d3.select('#refreshEng').on('click', function(){
+    $.ajax({
+        'url' : '/getUser/refreshEngList',
+        'method' : 'GET',
+        'success' : function(result){
+            if(result.length > 0){
+                alert('refresh done : total ' + result.length);
+            }
+        }
+    })
+})
 
