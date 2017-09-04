@@ -54,9 +54,13 @@ Date.prototype.getMidnightString = function(date){
 // set initial search begin and end date
 function initDate() {
     var startT = new Date();
+    var endT = new Date(Date.now() + 1000 * 60 * 30 )
+    console.log(startT);
+    console.log(endT);
     var ISOTime = startT.toISOString(startT);
+    var ISOTimeEnd = endT.toISOString(endT);
     $('#startTime').val(ISOTime);
-    $('#endTime').val(ISOTime);
+    $('#endTime').val(ISOTimeEnd);
 }
 //
 
@@ -113,6 +117,9 @@ function getFieldValue(){
 function clearFieldValue(){
     $('#engName').val('');
     $('#compNM').val('');
+    $('#task').val('');
+    $('#engName').attr('engID',undefined);
+    $('#compNM').attr('coID',undefined);
     initDate();
 }
 
@@ -174,7 +181,9 @@ autoComplteElement.autocomplete({
                                 label : item.CRGR_NM +' - '+ item.CO_NM,
                                 //value: { name : item.USER_NM , company : item.CO_NM },
                                 value : item.CRGR_NM,
-                                co : item.CO_NM
+                                co : item.CO_NM,
+                                engID : item.CRGR_ID,
+                                coID : item.CO_ID
                             };							
                         })
                     );
@@ -193,15 +202,14 @@ autoComplteElement.autocomplete({
         var promise = new Promise(function(resolve,reject){
             //$('#engName').val(ui.item.value.name);
             $('#compNM').val(ui.item.co);
+            $('#engName').attr('engID',ui.item.engID);
+            $('#compNM').attr('coID',ui.item.coID)
             resolve()
         })
         
         promise.then(function(result){
             // submit code 넣으면 된다..검색이라든가..뭐
-            var startT = new Date();
-            var ISOTime = startT.toISOString(startT);
-            $('#startTime').val(ISOTime);
-            $('#endTime').val(ISOTime);
+            initDate();
 
         });
         
@@ -231,7 +239,7 @@ getHistory(redrawTable);
 
 function addClickEvtOnTbody(){
     $('#history_table tbody').on('click','tr td img',function(){
-        alert('delete : ' + $(this).attr('history_id'));
+        //alert('delete : ' + $(this).attr('history_id'));
         var historyID = $(this).attr('history_id')
         delHistory(this, historyID);
     });

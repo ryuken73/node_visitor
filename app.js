@@ -93,7 +93,7 @@ var logTracer = tracer.console(
 global.logger = logTracer;	
 
 global.usermapWithJAMOCHO = [
-	{CRGR_NM:'류건우', CRGR_NM_CHO:'ㄹ,ㄱ,ㅇ', CRGR_NM_JAMO:'ㄹㅠㄱㅓㄴㅇㅜ', CO_NM:'SBS'}
+	{CRGR_NM:'류건우', CRGR_ID:200, CRGR_NM_CHO:'ㄹ,ㄱ,ㅇ', CRGR_NM_JAMO:'ㄹㅠㄱㅓㄴㅇㅜ', CO_NM:'SBS', CO_ID:101}
 ]
 
 //
