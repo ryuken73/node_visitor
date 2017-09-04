@@ -7938,3 +7938,16 @@
 2017-09-04 17:37:05 [trace][resultMySQL]  db execution Result : [{"HISTORY_ID":40,"CRGR_NM":"김광철","CRGR_ID":100,"CO_NM":"Netbro","CO_ID":100,"SRT_DTTM":"2017-09-04 16:58:37","END_DTTM":"2017-09-04 16:58:37","WRT_DTTM":null,"TASK":"NDS 시스템 작업","DEL_YN":"N"}] (in mysqldb.js:50)
 2017-09-04 17:37:05 [debug][Object.exports.delConnection]  mysql db connection close (in mysqldb.js:56)
 2017-09-04 17:37:05 [debug][Query.queryMySQL [as _callback]]  db execution OK : select * from sbs.visit_history_tbl where ( crgr_nm like ? or co_nm like ? or task like ? ) and ( srt_dttm >= ? and end_dttm <= ? ) and del_yn = "N" order by srt_dttm desc , parameters : ["%%","%%","%%","2016-09-04 00:00:00","2017-09-05 00:00:00"] (in mysqldb.js:40)
+2017-09-04 18:25:38 [info][Object.<anonymous>] DB2HOST : SBSDEV (in app.js:106)
+2017-09-04 18:25:38 [info][Object.<anonymous>] MYSQLHOST : DEVDB (in app.js:118)
+2017-09-04 18:25:43 [trace][] start get history (in getData.js:8)
+2017-09-04 18:25:43 [trace][] { searchPattern: '',
+  srt_dttm: '2017-09-04 00:00:00',
+  end_dttm: '2017-09-05 00:00:00' } (in getData.js:9)
+2017-09-04 18:25:43 [info][] start select History Data start (in selectHistory.js:8)
+2017-09-04 18:25:43 [trace][] get db connection success (in mysqldb.js:20)
+2017-09-04 18:25:43 [debug][Object.exports.executeSQL]  db query start : select * from visit_history_tbl where ( crgr_nm like ? or co_nm like ? or task like ? ) and ( srt_dttm >= ? and end_dttm <= ? ) and del_yn = "N" order by srt_dttm desc , parameters : ["%%","%%","%%","2017-09-04 00:00:00","2017-09-05 00:00:00"] (in mysqldb.js:32)
+2017-09-04 18:25:43 [debug][Query.queryMySQL [as _callback]]  db execution OK : select * from visit_history_tbl where ( crgr_nm like ? or co_nm like ? or task like ? ) and ( srt_dttm >= ? and end_dttm <= ? ) and del_yn = "N" order by srt_dttm desc , parameters : ["%%","%%","%%","2017-09-04 00:00:00","2017-09-05 00:00:00"] (in mysqldb.js:40)
+2017-09-04 18:25:43 [trace][resultMySQL]  db execution Result : [{"HISTORY_ID":40,"CRGR_NM":"김광철","CRGR_ID":100,"CO_NM":"Netbro","CO_ID":100,"SRT_DTTM":"2017-09-04 16:58:37","END_DTTM":"2017-09-04 16:58:37","WRT_DTTM":null,"TASK":"NDS 시스템 작업","DEL_YN":"N"}] (in mysqldb.js:50)
+2017-09-04 18:25:43 [trace][] select result [{"HISTORY_ID":40,"CRGR_NM":"김광철","CRGR_ID":100,"CO_NM":"Netbro","CO_ID":100,"SRT_DTTM":"2017-09-04 16:58:37","END_DTTM":"2017-09-04 16:58:37","WRT_DTTM":null,"TASK":"NDS 시스템 작업","DEL_YN":"N"}] (in selectHistory.js:40)
+2017-09-04 18:25:43 [debug][Object.exports.delConnection]  mysql db connection close (in mysqldb.js:56)

@@ -29,7 +29,7 @@ function insertHistory(req, res){
     return function(conn){
         
         var def = Q.defer();
-        mysqldb.executeSQL(req, 'insert into sbs.visit_history_tbl set ?',req.query)
+        mysqldb.executeSQL(req, 'insert into visit_history_tbl set ?',req.query)
         .then(function(result){
             global.logger.trace('insert success %j', result);
             def.resolve(result);
