@@ -231,6 +231,7 @@ var attachEventEnableAutoComplete = function(){
     })
 }
 
+// main
 initSearchDay();
 disableAutoComplete();  // initially disable auto complete
 attachEventEnableAutoComplete(); // enable autocomplete when keyup event occur
