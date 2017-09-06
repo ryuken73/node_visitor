@@ -51,6 +51,15 @@ Date.prototype.getMidnightString = function(date){
 
 // END Help function
 
+// task textarea enter event
+$('input#keyword').on('keypress',function(event){
+    console.log(event.keyCode);
+    if(event.keyCode === 13){
+        $('input#search').click();
+    }
+});
+
+
 // set initial search begin and end date
 function initDate() {
     var startT = new Date();

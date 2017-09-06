@@ -27,7 +27,7 @@ exports.history = function(req,res){
 
 function getHistory(req, res){
     return function(conn){
-        var srchPattern = '%'+req.query.searchPattern+'%';
+        var srchPattern = '%'+req.query.searchPattern.trimLeft().trimRight()+'%';
         var srt_dttm = req.query.srt_dttm;
         var end_dttm = req.query.end_dttm;
 
