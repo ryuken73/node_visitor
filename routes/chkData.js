@@ -13,6 +13,7 @@ router.get('/engID', function(req, res, next) {
     })
     .then(null, function(err){
         global.logger.error(err);
+        res.send({'validated':false});
     })
 });
 
