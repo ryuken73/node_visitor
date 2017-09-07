@@ -120,6 +120,8 @@ function getFieldValue(){
     result.SRT_DTTM = $('#startTime').val();
     result.END_DTTM = $('#endTime').val();
     result.TASK = $('#task').val();
+    alert(result.CRGR_ID)
+    alert(result.CO_ID)
     return result;
 }
 
