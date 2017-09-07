@@ -120,8 +120,6 @@ function getFieldValue(){
     result.SRT_DTTM = $('#startTime').val();
     result.END_DTTM = $('#endTime').val();
     result.TASK = $('#task').val();
-    alert(result.CRGR_ID)
-    alert(result.CO_ID)
     return result;
 }
 
@@ -129,9 +127,11 @@ function clearFieldValue(){
     $('#engName').val('');
     $('#compNM').val('');
     $('#task').val('');
+    $('#startTime').val('');
+    $('#endTime').val('');   
     $('#engName').attr('engID',undefined);
     $('#compNM').attr('coID',undefined);
-    initDate();
+    //initDate();
 }
 
 function validateField(params) {
@@ -214,13 +214,14 @@ autoComplteElement.autocomplete({
             //$('#engName').val(ui.item.value.name);
             $('#compNM').val(ui.item.co);
             $('#engName').attr('engID',ui.item.engID);
-            $('#compNM').attr('coID',ui.item.coID)
+            $('#compNM').attr('coID',ui.item.coID);
+            initDate();
             resolve()
         })
         
         promise.then(function(result){
             // submit code 넣으면 된다..검색이라든가..뭐
-            initDate();
+            //initDate();
 
         });
         
