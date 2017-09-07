@@ -30,7 +30,8 @@ function getEngListFromDB2(req,res){
     return function(conn){
 
         var def = Q.defer();
-        ibmdb.executeSQL(req,"select E.CRGR_NM,C.CO_NM,E.SEQ as CRGR_ID,C.CO_SRL_NO as CO_ID from MAT.F_CORPR_CO_CRGR_TBL E, MAT.F_CORPR_CO_TBL C where E.del_yn='N' and C.CO_SRL_NO=E.CO_SRL_NO",[])
+        ibmdb.executeSQL(req,"select E.CRGR_NM,C.CO_NM,E.SEQ as CRGR_ID,C.CO_SRL_NO as CO_ID from MAT.F_CORPR_CO_CRGR_TBL E, MAT.F_CORPR_CO_TBL C " +
+                             "where E.del_yn='N' and E.use_yn='Y' and C.del_yn='N' and C.use_yn='Y' and C.CO_SRL_NO=E.CO_SRL_NO",[])
         .then(function(data){
             if(data.length > 0){
                 var dataTrimmed = _.map(data, function(engInfo){

@@ -34,7 +34,7 @@ function chkEngInfoFromDB2(req,res){
         var def = Q.defer();
         ibmdb.executeSQL(req,"select E.CRGR_NM, C.CO_NM " + 
                              "from MAT.F_CORPR_CO_CRGR_TBL E, MAT.F_CORPR_CO_TBL C " + 
-                             "where E.del_yn='N' and C.CO_SRL_NO=E.CO_SRL_NO " + 
+                             "where E.del_yn='N' and E.use_yn='Y' and C.del_yn='N' and C.use_yn='Y' and C.CO_SRL_NO=E.CO_SRL_NO " + 
                              "and E.CRGR_NM = ? and E.SEQ = ? and C.CO_SRL_NO = ?", [req.query.CRGR_NM, req.query.CRGR_ID,req.query.CO_ID])
         .then(function(data){
             if(data.length > 0){
