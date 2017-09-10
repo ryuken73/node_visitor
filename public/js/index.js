@@ -8,7 +8,7 @@ setInterval(()=>{
 },1000)
 // Date Display End
 
-// help function
+// Date help function
 function padZero(num){
 	if(num < 10){
 		return '0'+num;
@@ -51,16 +51,17 @@ Date.prototype.getMidnightString = function(date){
 
 // END Help function
 
-// task textarea enter event
+// search input enter press event hander
 $('input#keyword').on('keypress',function(event){
     console.log(event.keyCode);
     if(event.keyCode === 13){
         $('input#search').click();
     }
 });
+//
 
 
-// set initial search begin and end date
+// set initial start and endtime ( endtime = start time + 30 minutes)
 function initDate() {
     var startT = new Date();
     var endT = new Date(Date.now() + 1000 * 60 * 30 )
@@ -73,6 +74,7 @@ function initDate() {
 }
 //
 
+// set initial search begin and end date
 function initSearchDay(){
     var searchDate = new Date();
     var beginD = searchDate.getTodayString(searchDate);
@@ -80,16 +82,19 @@ function initSearchDay(){
     $('#search_begind').val(beginD);
     $('#search_endd').val(endD);
 }
+//
 
-// Search Event
+// Search button click Event
 d3.select('#search').on('click', function(){
     getHistory(redrawTable);
 })
+//
 
 // Submit Event
 // insert or update history table
-// when data has row id => then update
-// no row id => then insert
+// if data has row id => Update
+// else => Insert   
+
 d3.select('#submit').on('click', function(){
     // check id and name from sbsdb
     var params = getFieldValue();
@@ -109,7 +114,7 @@ d3.select('#submit').on('click', function(){
         console.error(err);
         alert(err);
     })
-})
+});
 
 function getFieldValue(){
     var result = {};
@@ -123,36 +128,38 @@ function getFieldValue(){
     return result;
 }
 
-function clearFieldValue(){
-    $('#engName').val('');
-    $('#compNM').val('');
-    $('#task').val('');
-    $('#startTime').val('');
-    $('#endTime').val('');   
-    $('#engName').attr('engID',undefined);
-    $('#compNM').attr('coID',undefined);
-    //initDate();
-}
-
 function validateField(params) {
     return new Promise(function(resolve,reject){
-        $.ajax({
-            'url' : '/chkData/engID',
-            'type' : 'GET',
-            'data' : params,
-            'success' : function(result) {
-                if(result.validated){
-                    resolve(true);
-                } else {
 
-                    reject('등록되지 않은 엔지니어명입니다. ( SIIS 협력업체관리에 등록 후 사용 )');
+        if(validatedDateFormat(params)){ // check date format
+            $.ajax({
+                'url' : '/chkData/engID',
+                'type' : 'GET',
+                'data' : params,
+                'success' : function(result) {
+                    if(result.validated){
+                        resolve(true);
+                    } else {
+
+                        reject('등록되지 않은 엔지니어명입니다. ( SIIS 협력업체관리에 등록 후 사용 )');
+                    }
+                },
+                'failure' : function(err){
+                    reject('error to send validation request!')
                 }
-            },
-            'failure' : function(err){
-                reject('error to send validation request!')
-            }
-        })
+            });
+        } else {
+            reject('시작 또는 종료시간 체크!');
+        }
     })
+}
+
+function validatedDateFormat(param){
+    var datePattern = "\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d"; //2017-09-11 01:45:00 
+    var pattern = new RegExp(datePattern);
+    var srt_dttm_rslt = pattern.test(param.SRT_DTTM);
+    var end_dttm_rslt = pattern.test(param.END_DTTM);
+    return srt_dttm_rslt && end_dttm_rslt
 }
 
 function inputHistory(params){
@@ -174,6 +181,17 @@ function inputHistory(params){
         })
         resolve('registered');
     });
+}
+
+function clearFieldValue(){
+    $('#engName').val('');
+    $('#compNM').val('');
+    $('#task').val('');
+    $('#startTime').val('');
+    $('#endTime').val('');   
+    $('#engName').attr('engID',undefined);
+    $('#compNM').attr('coID',undefined);
+    //initDate();
 }
 // END Submit Event
 
@@ -243,6 +261,8 @@ var attachEventEnableAutoComplete = function(){
     })
 }
 
+// End autocomplete
+
 // main
 initSearchDay();
 disableAutoComplete();  // initially disable auto complete
@@ -250,6 +270,7 @@ attachEventEnableAutoComplete(); // enable autocomplete when keyup event occur
 addClickEvtOnTbody();
 getHistory(redrawTable);
 
+// add delete event on image
 function addClickEvtOnTbody(){
     $('#history_table tbody').on('click','tr td img',function(){
         //alert('delete : ' + $(this).attr('history_id'));
@@ -268,6 +289,7 @@ function delHistory(element, id){
     })
 
 }
+// End add delete event
 
 
 // get History function 
@@ -276,6 +298,10 @@ function getHistory(cb){
     var searchPattern = $('#keyword').val();
     var srt_dttm = $('#search_begind').val() + ' 00:00:00';
     var end_dttm = $('#search_endd').val() + ' 00:00:00';
+    if(srt_dttm >= end_dttm) {
+        alert('종료날짜가 시작일보다 커야합니다.');
+        return false
+    }
 
     $.ajax({
         'url' : '/getData/history',
