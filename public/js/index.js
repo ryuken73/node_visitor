@@ -102,7 +102,7 @@ d3.select('#submit').on('click', function(){
     validateField(params)
     .then(function(isvalidated){
         console.log('validated')
-        inputHistory(params);
+        return inputHistory(params);
     })
     .then(function(result){
         console.log('insert success')
