@@ -19,3 +19,7 @@ label,h1,h2,h3,h4,h5,h6,table {
 #compNM {
   background-color: azure;
 } 
+
+.td_task {
+  max-width: 350px;
+}

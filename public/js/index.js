@@ -333,7 +333,7 @@ function redrawTable(historyData){
         var comp = '<td co_id=' + data.CO_ID + '>' + data.CO_NM + '</td>';
         var startT = '<td>' + data.SRT_DTTM + '</td>';
         var endT = '<td>' + data.END_DTTM + '</td>';
-        var task = '<td>' + data.TASK + '</td>'
+        var task = '<td class="td_task">' + data.TASK + '</td>'
         var delIcon = '<td><img class="delHistory" history_id=' + data.HISTORY_ID + ' src="/images/glyphicons-208-remove.png"></img></td>'
         var end = '</tr>'
         var entry = head + name + comp + startT + endT + task + delIcon + end;
