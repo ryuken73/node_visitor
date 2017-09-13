@@ -206,8 +206,14 @@ autoComplteElement.autocomplete({
             'success':function(result){
                 response(
                         $.map(result.slice(0,MAXVISIBLE),function(item){
-                            return{
-                                label : item.CRGR_NM +' - '+ item.CO_NM,
+                            var CONM = item.CO_NM;
+                            var MPNO = item.CRGR_MPNO ? item.CRGR_MPNO : '없음';
+                            var TELNO = item.CRGR_TELNO ? item.CRGR_TELNO : '없음';
+                            var EMAIL = item.CRGR_EMAIL ? item.CRGR_EMAIL : '없음';
+                            var engInfo = item.CRGR_NM + ' ( ' + CONM + ' , ' + MPNO + ' , ' + TELNO + ' , ' + EMAIL + ' ) ';
+
+                            return{                            
+                                label : engInfo,
                                 //value: { name : item.USER_NM , company : item.CO_NM },
                                 value : item.CRGR_NM,
                                 co : item.CO_NM,
