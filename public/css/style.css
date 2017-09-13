@@ -21,5 +21,24 @@ label,h1,h2,h3,h4,h5,h6,table {
 } 
 
 .td_task {
-  max-width: 350px;
+  max-width: 300px;
 }
+
+[contenteditable="true"]:active,
+[contenteditable="true"]:focus{
+  font-weight:bold;
+}
+
+td.editing {
+  color : darkgray;
+}
+tr.editing {
+  background : lightslategray;
+}
+td { 
+  white-space:pre-wrap
+};
+
+button.invisible {
+  border : "none";
+};

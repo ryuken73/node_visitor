@@ -299,15 +299,44 @@ function delHistory(element, id){
 
 // add update event on update image
 function addUpdateEvtOnTbody(){
+    // click on image
     $('#history_table tbody').on('click','tr td img.uptHistory',function(){
         //alert('delete : ' + $(this).attr('history_id'));
-        var historyID = $(this).attr('history_id');
-        var targetTR = $('tr[history_id='+historyID+']');
-        var startT = targetTR.children('td.startTime').text();
-        var endT = targetTR.children('td.endTime').text();
-        var task = targetTR.children('td.td_task').text();
-        uptHistory(historyID, startT, endT, task);
+        var param = getUpdateValue($(this));
+        uptHistory(param.historyID, param.SRT_DTTM, param.END_DTTM, param.TASK)
     });
+
+    // enter on image
+    $('#history_table tbody').on('keypress','tr td img.uptHistory',function(event){
+        console.log('key pressed ' + event.keyCode);
+        if(event.keyCode === 13){
+            var param = getUpdateValue($(this));
+            uptHistory(param.historyID, param.SRT_DTTM, param.END_DTTM, param.TASK)
+        }
+
+    })
+
+    // focus out => auto save 
+    /* but tab does not work properly
+    $('#history_table tbody').on('focusout','tr td[contenteditable="true"]',function(){
+        console.log('focus out');
+        var param = getUpdateValue($(this).parent());
+        uptHistory(param.historyID, param.SRT_DTTM, param.END_DTTM, param.TASK)
+    })
+    */    
+}
+
+function getUpdateValue(elementWithHistoryID){
+    var historyID = $(elementWithHistoryID).attr('history_id');
+    console.log(historyID);
+    var targetTR = $('tr[history_id='+historyID+']');
+
+    var result = {};
+    result.historyID = historyID;
+    result.SRT_DTTM = targetTR.children('td.startTime').text();
+    result.END_DTTM = targetTR.children('td.endTime').text();
+    result.TASK = targetTR.children('td.td_task').text();
+    return result;
 }
 
 function uptHistory(id, startT, endT, task){
@@ -324,7 +353,6 @@ function uptHistory(id, startT, endT, task){
         }
     })
 }
-
 
 // End add delete event
 
@@ -371,15 +399,13 @@ function redrawTable(historyData){
         var startT = '<td class="startTime" contentEditable="true">' + data.SRT_DTTM + '</td>';
         var endT = '<td class="endTime" contentEditable="true">' + data.END_DTTM + '</td>';
         var task = '<td class="td_task" contentEditable="true">' + data.TASK + '</td>'
-        var uptIcon = '<td><img class="uptHistory" history_id=' + data.HISTORY_ID + ' src="/images/glyphicons-199-ok-circle.png"></img></td>'
-        var delIcon = '<td><img class="delHistory" history_id=' + data.HISTORY_ID + ' src="/images/glyphicons-198-remove-circle.png"></img></td>'
+        var uptIcon = '<td><img tabindex="0" class="uptHistory" history_id=' + data.HISTORY_ID + ' src="/images/glyphicons-199-ok-circle.png"></img></td>'
+        var delIcon = '<td><img tabindex="0" class="delHistory" history_id=' + data.HISTORY_ID + ' src="/images/glyphicons-198-remove-circle.png"></img></td>'
         var end = '</tr>'
         var entry = head + name + comp + startT + endT + task + uptIcon + delIcon + end;
         tbody.append(entry)
     })
 }
-
-//
 
 // refresh engInfo event attachEventEnableAutoComplete
 d3.select('#refreshEng').on('click', function(){
@@ -392,5 +418,13 @@ d3.select('#refreshEng').on('click', function(){
             }
         }
     })
+})
+
+// attach event to contentEditable
+// when editing background color change
+// not support change(), use input event
+$('#history_table tbody').on('input','tr td',function(){
+    $('[contenteditable="true"]:focus').addClass('editing');
+    $('[contenteditable="true"]:focus').parent().addClass('editing');
 })
 
