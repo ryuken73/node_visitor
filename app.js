@@ -17,6 +17,7 @@ var chkData = require('./routes/chkData');
 var setData = require('./routes/setData');
 var getData = require('./routes/getData');
 var delData = require('./routes/delData');
+var uptData = require('./routes/uptData');
 
 var app = express();
 
@@ -138,6 +139,7 @@ app.use('/chkData', chkData);
 app.use('/setData', setData);
 app.use('/getData', getData);
 app.use('/delData', delData);
+app.use('/uptData', uptData);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

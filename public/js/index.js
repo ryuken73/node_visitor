@@ -169,6 +169,7 @@ function inputHistory(params){
             'type' : 'GET',
             'data' : params,
             'success' : function(result){
+                console.log(result);
                 if(result.success){
                     resolve(true);
                 } else {
@@ -179,7 +180,6 @@ function inputHistory(params){
                 reject('error to set Data!');
             }
         })
-        resolve('registered');
     });
 }
 
@@ -274,11 +274,12 @@ initSearchDay();
 disableAutoComplete();  // initially disable auto complete
 attachEventEnableAutoComplete(); // enable autocomplete when keyup event occur
 addClickEvtOnTbody();
+addUpdateEvtOnTbody();
 getHistory(redrawTable);
 
 // add delete event on image
 function addClickEvtOnTbody(){
-    $('#history_table tbody').on('click','tr td img',function(){
+    $('#history_table tbody').on('click','tr td img.delHistory',function(){
         //alert('delete : ' + $(this).attr('history_id'));
         var historyID = $(this).attr('history_id')
         delHistory(this, historyID);
@@ -295,6 +296,36 @@ function delHistory(element, id){
     })
 
 }
+
+// add update event on update image
+function addUpdateEvtOnTbody(){
+    $('#history_table tbody').on('click','tr td img.uptHistory',function(){
+        //alert('delete : ' + $(this).attr('history_id'));
+        var historyID = $(this).attr('history_id');
+        var targetTR = $('tr[history_id='+historyID+']');
+        var startT = targetTR.children('td.startTime').text();
+        var endT = targetTR.children('td.endTime').text();
+        var task = targetTR.children('td.td_task').text();
+        uptHistory(historyID, startT, endT, task);
+    });
+}
+
+function uptHistory(id, startT, endT, task){
+    $.ajax({
+        'url' : /uptData/ + id,
+        'method' : 'GET',
+        'data' : {
+            SRT_DTTM : startT,
+            END_DTTM : endT,
+            TASK : task
+        },
+        'success' : function(){
+            getHistory(redrawTable);
+        }
+    })
+}
+
+
 // End add delete event
 
 
@@ -337,12 +368,13 @@ function redrawTable(historyData){
         var head = '<tr history_id=' + data.HISTORY_ID + '>'
         var name = '<td crgr_id=' + data.CRGR_ID + ' >' + data.CRGR_NM + '</td>';
         var comp = '<td co_id=' + data.CO_ID + '>' + data.CO_NM + '</td>';
-        var startT = '<td>' + data.SRT_DTTM + '</td>';
-        var endT = '<td>' + data.END_DTTM + '</td>';
-        var task = '<td class="td_task">' + data.TASK + '</td>'
-        var delIcon = '<td><img class="delHistory" history_id=' + data.HISTORY_ID + ' src="/images/glyphicons-208-remove.png"></img></td>'
+        var startT = '<td class="startTime" contentEditable="true">' + data.SRT_DTTM + '</td>';
+        var endT = '<td class="endTime" contentEditable="true">' + data.END_DTTM + '</td>';
+        var task = '<td class="td_task" contentEditable="true">' + data.TASK + '</td>'
+        var uptIcon = '<td><img class="uptHistory" history_id=' + data.HISTORY_ID + ' src="/images/glyphicons-199-ok-circle.png"></img></td>'
+        var delIcon = '<td><img class="delHistory" history_id=' + data.HISTORY_ID + ' src="/images/glyphicons-198-remove-circle.png"></img></td>'
         var end = '</tr>'
-        var entry = head + name + comp + startT + endT + task + delIcon + end;
+        var entry = head + name + comp + startT + endT + task + uptIcon + delIcon + end;
         tbody.append(entry)
     })
 }
