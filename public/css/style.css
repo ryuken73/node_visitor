@@ -21,7 +21,7 @@ label,h1,h2,h3,h4,h5,h6,table {
 } 
 
 .td_task {
-  max-width: 300px;
+  max-width: 270px;
 }
 
 [contenteditable="true"]:active,
