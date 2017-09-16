@@ -346,6 +346,7 @@ function addUpdateEvtOnTbody(){
     */    
 }
 
+// stackoverflow , how to move cursor to end of element
 function setEndOfContenteditable(contentEditableElement)
 {
     var range,selection;
