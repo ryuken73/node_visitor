@@ -19,14 +19,14 @@ function padZero(num){
 	return num.toString();
 };
 
-Date.prototype.toISOString = function(date){
+Date.prototype.toISOString = function(){
 
-	var year = date.getFullYear();
-	var month = padZero(date.getMonth() + 1);
-	var day = padZero(date.getDate());
-	var hour = padZero(date.getHours());
-	var minute = padZero(date.getMinutes());
-	var second = padZero(date.getSeconds());
+	var year = this.getFullYear();
+	var month = padZero(this.getMonth() + 1);
+	var day = padZero(this.getDate());
+	var hour = padZero(this.getHours());
+	var minute = padZero(this.getMinutes());
+	var second = padZero(this.getSeconds());
 
 	return year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;
 };
@@ -80,8 +80,8 @@ function initDate() {
     var endT = new Date(Date.now() + 1000 * 60 * 30 )
     console.log(startT);
     console.log(endT);
-    var ISOTime = startT.toISOString(startT);
-    var ISOTimeEnd = endT.toISOString(endT);
+    var ISOTime = startT.toISOString();
+    var ISOTimeEnd = endT.toISOString();
     $('#startTime').val(ISOTime);
     $('#endTime').val(ISOTimeEnd);
 }
@@ -324,6 +324,18 @@ function addUpdateEvtOnTbody(){
 
     })
 
+    // click on date
+    // automatically change current time
+    $('#history_table tbody').on('click','tr td[contenteditable="true"].endTime',function(){
+        console.log($(this));
+        console.log($(this).text());
+        var date = new Date();
+        var now = date.toISOString();
+        $(this).text(now);
+        setEndOfContenteditable(this);
+        $(this).trigger('input');
+    })
+
     // focus out => auto save 
     /* but tab does not work properly
     $('#history_table tbody').on('focusout','tr td[contenteditable="true"]',function(){
@@ -333,6 +345,28 @@ function addUpdateEvtOnTbody(){
     })
     */    
 }
+
+function setEndOfContenteditable(contentEditableElement)
+{
+    var range,selection;
+    if(document.createRange)//Firefox, Chrome, Opera, Safari, IE 9+
+    {
+        range = document.createRange();//Create a range (a range is a like the selection but invisible)
+        range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
+        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+        selection = window.getSelection();//get the selection object (allows you to change selection)
+        selection.removeAllRanges();//remove any selections already made
+        selection.addRange(range);//make the range you have just created the visible selection
+    }
+    else if(document.selection)//IE 8 and lower
+    { 
+        range = document.body.createTextRange();//Create a range (a range is a like the selection but invisible)
+        range.moveToElementText(contentEditableElement);//Select the entire contents of the element with the range
+        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+        range.select();//Select the range (make it the visible selection
+    }
+}
+
 
 function getUpdateValue(elementWithHistoryID){
     var historyID = $(elementWithHistoryID).attr('history_id');
@@ -411,6 +445,7 @@ function redrawTable(historyData){
         var delIcon = '<td><img tabindex="0" class="delHistory" history_id=' + data.HISTORY_ID + ' src="/images/glyphicons-198-remove-circle.png"></img></td>'
         var end = '</tr>'
         var entry = head + name + comp + startT + endT + task + uptIcon + delIcon + end;
+
         tbody.append(entry)
     })
 }
@@ -429,8 +464,8 @@ d3.select('#refreshEng').on('click', function(){
 })
 
 // attach event to contentEditable
-// when editing background color change
-// not support change(), use input event
+// when editting starts, background color changes.
+// because contenteditable does not support change(), use input event
 $('#history_table tbody').on('input','tr td',function(){
     $('[contenteditable="true"]:focus').addClass('editing');
     $('[contenteditable="true"]:focus').parent().addClass('editing');
