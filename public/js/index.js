@@ -1,4 +1,6 @@
 
+DAYOFFSET = -1; //default begind offset days from today
+
 // Date display
 var now = new Date();
 d3.select('#today').text(now);
@@ -7,6 +9,7 @@ setInterval(()=>{
     d3.select('#today').text(now);
 },1000)
 // Date Display End
+
 
 // Date help function
 function padZero(num){
@@ -28,18 +31,12 @@ Date.prototype.toISOString = function(date){
 	return year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;
 };
 
-Date.prototype.getTodayString = function(date){
-	var year = date.getFullYear();
-	var month = padZero(date.getMonth() + 1);
-	var day = padZero(date.getDate());
-    return year+'-'+month+'-'+day;    
-}
-
-Date.prototype.getTomorrowString = function(date){
-	var year = date.getFullYear();
-	var month = padZero(date.getMonth() + 1);
-	var day = padZero(date.getDate() + 1);
-    return year+'-'+month+'-'+day;    
+Date.prototype.getDayString = function(offset) {
+    this.setDate(this.getDate() + offset );
+ 	var year = this.getFullYear();
+	var month = padZero(this.getMonth() + 1);
+	var day = padZero(this.getDate());
+    return year+'-'+month+'-'+day;       
 }
 
 Date.prototype.getMidnightString = function(date){
@@ -51,6 +48,7 @@ Date.prototype.getMidnightString = function(date){
 
 // END Help function
 
+
 // search input enter press event hander
 $('input#keyword').on('keypress',function(event){
     console.log(event.keyCode);
@@ -58,6 +56,21 @@ $('input#keyword').on('keypress',function(event){
         $('input#search').click();
     }
 });
+
+$('input#search_begind').on('keypress',function(event){
+    console.log(event.keyCode);
+    if(event.keyCode === 13){
+        $('input#search').click();
+    }
+});
+
+$('input#search_endd').on('keypress',function(event){
+    console.log(event.keyCode);
+    if(event.keyCode === 13){
+        $('input#search').click();
+    }
+});
+
 //
 
 
@@ -76,9 +89,10 @@ function initDate() {
 
 // set initial search begin and end date
 function initSearchDay(){
-    var searchDate = new Date();
-    var beginD = searchDate.getTodayString(searchDate);
-    var endD = searchDate.getTomorrowString(searchDate);
+    var date1 = new Date();
+    var date2 = new Date();
+    var beginD = date1.getDayString(DAYOFFSET);
+    var endD = date2.getDayString(0);
     $('#search_begind').val(beginD);
     $('#search_endd').val(endD);
 }
@@ -269,13 +283,7 @@ var attachEventEnableAutoComplete = function(){
 
 // End autocomplete
 
-// main
-initSearchDay();
-disableAutoComplete();  // initially disable auto complete
-attachEventEnableAutoComplete(); // enable autocomplete when keyup event occur
-addClickEvtOnTbody();
-addUpdateEvtOnTbody();
-getHistory(redrawTable);
+
 
 // add delete event on image
 function addClickEvtOnTbody(){
@@ -362,7 +370,7 @@ function uptHistory(id, startT, endT, task){
 function getHistory(cb){
     var searchPattern = $('#keyword').val();
     var srt_dttm = $('#search_begind').val() + ' 00:00:00';
-    var end_dttm = $('#search_endd').val() + ' 00:00:00';
+    var end_dttm = $('#search_endd').val() + ' 23:59:59';
     if(srt_dttm >= end_dttm) {
         alert('종료날짜가 시작일보다 커야합니다.');
         return false
@@ -428,3 +436,11 @@ $('#history_table tbody').on('input','tr td',function(){
     $('[contenteditable="true"]:focus').parent().addClass('editing');
 })
 
+
+// main
+initSearchDay();
+disableAutoComplete();  // initially disable auto complete
+attachEventEnableAutoComplete(); // enable autocomplete when keyup event occur
+addClickEvtOnTbody();
+addUpdateEvtOnTbody();
+getHistory(redrawTable);
