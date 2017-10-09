@@ -6,8 +6,7 @@ var now = new Date();
 d3.select('#today').text(now);
 setInterval(()=>{
     now = new Date();
-    d3.select('#today')
-    .text(now);
+    d3.select('#today').text(now);
 },1000)
 // Date Display End
 
@@ -51,26 +50,69 @@ Date.prototype.getMidnightString = function(date){
 
 
 // search input enter press event hander
+/*
 $('input#keyword').on('keypress',function(event){
     console.log(event.keyCode);
     if(event.keyCode === 13){
         $('input#search').click();
     }
 });
+*/
 
+/* d3 version
+d3.select('input#keyword').on('keypress',function(d,i){
+    console.log(d3.event.keyCode);
+    if(d3.event.keyCode === 13){
+    }   d3.select('input#search').dispatch('click')
+})
+*/
+
+var inputBox = d3.select('input#keyword');
+var beginBox = d3.select('input#search_begind');
+var endBox = d3.select('input#search_endd');
+var Boxes = [inputBox, beginBox, endBox];
+
+Boxes.map(function(element){
+    addEvent(element, 'keypress', function(){
+        console.log(d3.event.keyCode);
+        if(d3.event.keyCode === 13){
+            d3.select('input#search').dispatch('click');
+        }
+    });
+})
+
+function addEvent(element, typeName, callback){
+    element.on(typeName,function(d,i){
+        callback();    
+    });
+}
+
+
+/*
 $('input#search_begind').on('keypress',function(event){
     console.log(event.keyCode);
     if(event.keyCode === 13){
         $('input#search').click();
     }
 });
-
+*/
+/*
+d3.select('input#search_begind').on('keypress',function(d,i){
+    console.log(d3.event.keyCode);
+    if(d3.event.keyCode === 13){
+        d3.select('input#search').dispatch('click');
+    }
+});
+*/
+/*
 $('input#search_endd').on('keypress',function(event){
     console.log(event.keyCode);
     if(event.keyCode === 13){
         $('input#search').click();
     }
 });
+*/
+
 
 //
 
@@ -83,8 +125,8 @@ function initDate() {
     console.log(endT);
     var ISOTime = startT.toISOString();
     var ISOTimeEnd = endT.toISOString();
-    $('#startTime').val(ISOTime);
-    $('#endTime').val(ISOTimeEnd);
+    d3.select('#startTime').property('value',ISOTime);
+    d3.select('#endTime').property('value',ISOTimeEnd);    
 }
 //
 
@@ -94,8 +136,8 @@ function initSearchDay(){
     var date2 = new Date();
     var beginD = date1.getDayString(DAYOFFSET);
     var endD = date2.getDayString(0);
-    $('#search_begind').val(beginD);
-    $('#search_endd').val(endD);
+    d3.select('#search_begind').property('value',beginD);
+    d3.select('#search_endd').property('value',endD); 
 }
 //
 
@@ -133,13 +175,13 @@ d3.select('#submit').on('click', function(){
 
 function getFieldValue(){
     var result = {};
-    result.CRGR_NM = $('#engName').val();
-    result.CRGR_ID = $('#engName').attr('engID') ? $('#engName').attr('engID') : 100;
-    result.CO_NM = $('#compNM').val();
-    result.CO_ID = $('#compNM').attr('coID') ? $('#compNM').attr('coID') : 100 ;
-    result.SRT_DTTM = $('#startTime').val();
-    result.END_DTTM = $('#endTime').val();
-    result.TASK = $('#task').val();
+    result.CRGR_NM = d3.select('#engName').property('value');
+    result.CRGR_ID = d3.select('#engName').attr('engID') ? d3.select('#engName').attr('engID') : 100;
+    result.CO_NM = d3.select('#compNM').property('value');
+    result.CO_ID = d3.select('#compNM').attr('coID') ? d3.select('#compNM').attr('coID') : 100 ;
+    result.SRT_DTTM = d3.select('#startTime').property('value');
+    result.END_DTTM = d3.select('#endTime').property('value');
+    result.TASK = d3.select('#task').property('value');
     return result;
 }
 
@@ -404,9 +446,9 @@ function uptHistory(id, startT, endT, task){
 // get History function 
 
 function getHistory(cb){
-    var searchPattern = $('#keyword').val();
-    var srt_dttm = $('#search_begind').val() + ' 00:00:00';
-    var end_dttm = $('#search_endd').val() + ' 23:59:59';
+    var searchPattern = d3.select('#keyword').property('value');
+    var srt_dttm = d3.select('#search_begind').property('value') + ' 00:00:00';
+    var end_dttm = d3.select('#search_endd').property('value') + ' 23:59:59';
     if(srt_dttm >= end_dttm) {
         alert('종료날짜가 시작일보다 커야합니다.');
         return false
@@ -434,22 +476,36 @@ function getHistory(cb){
 
 // recreate table data
 function redrawTable(historyData){
-    var tbody = $('tbody');
-    tbody.empty();
-    historyData.forEach(function(data){
-        var head = '<tr history_id=' + data.HISTORY_ID + '>'
-        var name = '<td crgr_id=' + data.CRGR_ID + ' >' + data.CRGR_NM + '</td>';
-        var comp = '<td co_id=' + data.CO_ID + '>' + data.CO_NM + '</td>';
-        var startT = '<td class="startTime" contentEditable="true">' + data.SRT_DTTM + '</td>';
-        var endT = '<td class="endTime" contentEditable="true">' + data.END_DTTM + '</td>';
-        var task = '<td class="td_task" contentEditable="true">' + data.TASK + '</td>'
-        var uptIcon = '<td><img tabindex="0" class="uptHistory" history_id=' + data.HISTORY_ID + ' src="/images/glyphicons-199-ok-circle.png"></img></td>'
-        var delIcon = '<td><img tabindex="0" class="delHistory" history_id=' + data.HISTORY_ID + ' src="/images/glyphicons-198-remove-circle.png"></img></td>'
-        var end = '</tr>'
-        var entry = head + name + comp + startT + endT + task + uptIcon + delIcon + end;
 
-        tbody.append(entry)
-    })
+    // update data
+    var tr = d3.select('tbody').selectAll('tr').data(historyData,function(d){return d.HISTORY_ID}).classed('editing',false)
+
+    // revmoe data
+    tr.exit().transition().duration(1000).style('color','black').remove()
+
+    // new data
+    tr = tr.enter().append('tr').attr('history_id', getValue('HISTORY_ID')) 
+    tr.append('td').attr('crgr_id', getValue('CRGR_ID')).text(getValue('CRGR_NM'))
+    tr.append('td').attr('co_id', getValue('CO_ID')).text(getValue('CO_NM'))
+    tr.append('td').attr('class','startTime').attr('contentEditable','true').text(getValue('SRT_DTTM'))
+    tr.append('td').attr('class','endTime').attr('contentEditable','true').text(getValue('END_DTTM'))    
+    tr.append('td').attr('class','td_task').attr('contentEditable','true').text(getValue('TASK'))  
+
+    tr.append('td')
+      .append('img').attr('tabindex','0').attr('class','uptHistory')
+      .attr('history_id',getValue('HISTORY_ID')).attr('src','/images/glyphicons-199-ok-circle.png')
+
+    tr.append('td')
+      .append('img').attr('tabindex','0').attr('class','delHistory')
+      .attr('history_id',getValue('HISTORY_ID')).attr('src','/images/glyphicons-198-remove-circle.png')
+
+    //tr.transition().duration(1000).style('color','yellow')       
+}
+
+function getValue(colname){
+    return function(d,i){
+        return d[colname];
+    }
 }
 
 // refresh engInfo event attachEventEnableAutoComplete
