@@ -479,17 +479,27 @@ function redrawTable(historyData){
 
     // update data
     var tr = d3.select('tbody').selectAll('tr').data(historyData,function(d){return d.HISTORY_ID}).classed('editing',false)
+    
+    // remove editing class from all td
+    d3.select('tbody').selectAll('tr').selectAll('td').classed('editing',false);
 
     // revmoe data
-    tr.exit().transition().duration(1000).style('color','black').remove()
+    var backgroundColor = d3.select('body').style('background-color')
+    console.log(backgroundColor)
+    tr.exit().transition().duration(500).style('color',backgroundColor).remove()
 
     // new data
     tr = tr.enter().append('tr').attr('history_id', getValue('HISTORY_ID')) 
     tr.append('td').attr('crgr_id', getValue('CRGR_ID')).text(getValue('CRGR_NM'))
+    .style('color','yellow').transition().duration(1000).style('color','white')
     tr.append('td').attr('co_id', getValue('CO_ID')).text(getValue('CO_NM'))
+    .style('color','yellow').transition().duration(1000).style('color','white')
     tr.append('td').attr('class','startTime').attr('contentEditable','true').text(getValue('SRT_DTTM'))
+    .style('color','yellow').transition().duration(1000).style('color','white')
     tr.append('td').attr('class','endTime').attr('contentEditable','true').text(getValue('END_DTTM'))    
+    .style('color','yellow').transition().duration(1000).style('color','white')
     tr.append('td').attr('class','td_task').attr('contentEditable','true').text(getValue('TASK'))  
+    .style('color','yellow').transition().duration(1000).style('color','white')
 
     tr.append('td')
       .append('img').attr('tabindex','0').attr('class','uptHistory')
