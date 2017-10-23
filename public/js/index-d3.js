@@ -143,9 +143,27 @@ function initSearchDay(){
 
 // Search button click Event
 d3.select('#search').on('click', function(){
+    //hideCancelBTN();
     getHistory(redrawTable);
 })
 //
+
+function showCancelBTN(){
+    d3.select('input#cancel').style('visibility','visible')
+}
+
+
+function hideCancelBTN(){
+    //d3.select('input#search').dispatch('click');
+    d3.select('input#cancel').style('visibility','hidden')
+
+}
+
+d3.select('input#cancel').on('click',function(){
+    console.log('remove click')
+    d3.select('input#search').dispatch('click');
+    //hideCancelBTN();
+})
 
 // Submit Event
 // insert or update history table
@@ -435,7 +453,7 @@ function uptHistory(id, startT, endT, task){
             TASK : task
         },
         'success' : function(){
-            getHistory(redrawTable);
+            getHistory(redrawTable); 
         }
     })
 }
@@ -477,29 +495,30 @@ function getHistory(cb){
 // recreate table data
 function redrawTable(historyData){
 
+
     // update data
-    var tr = d3.select('tbody').selectAll('tr').data(historyData,function(d){return d.HISTORY_ID}).classed('editing',false)
-    
+    var tr = d3.select('tbody').selectAll('tr').data(historyData,function(d){console.log(d.HISTORY_ID);return d.HISTORY_ID}).classed('editing',false).classed('editing',false)
+
     // remove editing class from all td
     d3.select('tbody').selectAll('tr').selectAll('td').classed('editing',false);
 
     // revmoe data
     var backgroundColor = d3.select('body').style('background-color')
-    console.log(backgroundColor)
-    tr.exit().transition().duration(500).style('color',backgroundColor).remove()
+    tr.exit().selectAll('td').transition().duration(1000).style('color',backgroundColor).remove()
 
     // new data
+    var transitionForTR = d3.transition().duration(1000)
     tr = tr.enter().append('tr').attr('history_id', getValue('HISTORY_ID')) 
     tr.append('td').attr('crgr_id', getValue('CRGR_ID')).text(getValue('CRGR_NM'))
-    .style('color','yellow').transition().duration(1000).style('color','white')
+    .style('color',backgroundColor).transition(transitionForTR).style('color','white')
     tr.append('td').attr('co_id', getValue('CO_ID')).text(getValue('CO_NM'))
-    .style('color','yellow').transition().duration(1000).style('color','white')
+    .style('color',backgroundColor).transition(transitionForTR).style('color','white')
     tr.append('td').attr('class','startTime').attr('contentEditable','true').text(getValue('SRT_DTTM'))
-    .style('color','yellow').transition().duration(1000).style('color','white')
+    .style('color',backgroundColor).transition(transitionForTR).style('color','white')
     tr.append('td').attr('class','endTime').attr('contentEditable','true').text(getValue('END_DTTM'))    
-    .style('color','yellow').transition().duration(1000).style('color','white')
+    .style('color',backgroundColor).transition(transitionForTR).style('color','white')
     tr.append('td').attr('class','td_task').attr('contentEditable','true').text(getValue('TASK'))  
-    .style('color','yellow').transition().duration(1000).style('color','white')
+    .style('color',backgroundColor).transition(transitionForTR).style('color','white')
 
     tr.append('td')
       .append('img').attr('tabindex','0').attr('class','uptHistory')
@@ -509,7 +528,9 @@ function redrawTable(historyData){
       .append('img').attr('tabindex','0').attr('class','delHistory')
       .attr('history_id',getValue('HISTORY_ID')).attr('src','/images/glyphicons-198-remove-circle.png')
 
-    //tr.transition().duration(1000).style('color','yellow')       
+    //tr.transition().duration(1000).style('color','yellow')    
+
+
 }
 
 function getValue(colname){
@@ -537,6 +558,7 @@ d3.select('#refreshEng').on('click', function(){
 $('#history_table tbody').on('input','tr td',function(){
     $('[contenteditable="true"]:focus').addClass('editing');
     $('[contenteditable="true"]:focus').parent().addClass('editing');
+    //showCancelBTN();
 })
 
 
