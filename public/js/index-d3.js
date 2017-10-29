@@ -495,9 +495,11 @@ function getHistory(cb){
 // recreate table data
 function redrawTable(historyData){
 
+    // update data is very difficult
+    // remove previous table make simple but become ugly
+    d3.select('tbody').selectAll('tr').remove();
 
-    // update data
-    var tr = d3.select('tbody').selectAll('tr').data(historyData,function(d){console.log(d.HISTORY_ID);return d.HISTORY_ID}).classed('editing',false).classed('editing',false)
+    var tr = d3.select('tbody').selectAll('tr').data(historyData,function(d){return d.HISTORY_ID}).classed('editing',false)
 
     // remove editing class from all td
     d3.select('tbody').selectAll('tr').selectAll('td').classed('editing',false);
@@ -507,7 +509,7 @@ function redrawTable(historyData){
     tr.exit().selectAll('td').transition().duration(1000).style('color',backgroundColor).remove()
 
     // new data
-    var transitionForTR = d3.transition().duration(1000)
+    var transitionForTR = d3.transition().duration(500)
     tr = tr.enter().append('tr').attr('history_id', getValue('HISTORY_ID')) 
     tr.append('td').attr('crgr_id', getValue('CRGR_ID')).text(getValue('CRGR_NM'))
     .style('color',backgroundColor).transition(transitionForTR).style('color','white')
@@ -530,13 +532,60 @@ function redrawTable(historyData){
 
     //tr.transition().duration(1000).style('color','yellow')    
 
+}
+
+// redraw table data real d3.js
+function redrawTable_real(historyData){
+
+    // update data
+    var tr = d3.select('tbody').selectAll('tr').data(historyData,function(d){return d.HISTORY_ID}).classed('editing',false)
+
+    // remove editing class from all td
+    d3.select('tbody').selectAll('tr').selectAll('td').classed('editing',false);
+
+    // revmoe data
+    var backgroundColor = d3.select('body').style('background-color')
+    tr.exit().selectAll('td').transition().duration(1000).style('color',backgroundColor).remove()
+
+    // make tabular data
+    // first  : from collection data enter tr with rows ( each tr's data = {'id':100, 'name':'ryu'....})
+    // second : very complicated
+    // 1. from object {'id':100, 'name':'ryu'}, make array like [{key:'id', value:100},{key:'name', value:'ryu'}]
+    // 2. enter above array data to td
+
+    var transitionForTR = d3.transition().duration(1000)
+    tr = tr.enter().append('tr').attr('history_id', getValue('HISTORY_ID')) 
+    tr.selectAll('td').data(function(d,i){return d}).append('td')
+    /*
+    tr.append('td').attr('crgr_id', getValue('CRGR_ID')).text(getValue('CRGR_NM'))
+    .style('color',backgroundColor).transition(transitionForTR).style('color','white')
+    tr.append('td').attr('co_id', getValue('CO_ID')).text(getValue('CO_NM'))
+    .style('color',backgroundColor).transition(transitionForTR).style('color','white')
+    tr.append('td').attr('class','startTime').attr('contentEditable','true').text(getValue('SRT_DTTM'))
+    .style('color',backgroundColor).transition(transitionForTR).style('color','white')
+    tr.append('td').attr('class','endTime').attr('contentEditable','true').text(getValue('END_DTTM'))    
+    .style('color',backgroundColor).transition(transitionForTR).style('color','white')
+    tr.append('td').attr('class','td_task').attr('contentEditable','true').text(getValue('TASK'))  
+    .style('color',backgroundColor).transition(transitionForTR).style('color','white')
+
+    tr.append('td')
+      .append('img').attr('tabindex','0').attr('class','uptHistory')
+      .attr('history_id',getValue('HISTORY_ID')).attr('src','/images/glyphicons-199-ok-circle.png')
+
+    tr.append('td')
+      .append('img').attr('tabindex','0').attr('class','delHistory')
+      .attr('history_id',getValue('HISTORY_ID')).attr('src','/images/glyphicons-198-remove-circle.png')
+    */
+
+    //tr.transition().duration(1000).style('color','yellow')    
 
 }
+
 
 function getValue(colname){
     return function(d,i){
         return d[colname];
-    }
+    } 
 }
 
 // refresh engInfo event attachEventEnableAutoComplete
