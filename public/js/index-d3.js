@@ -493,7 +493,7 @@ function getHistory(cb){
 //
 
 // recreate table data
-function redrawTable(historyData){
+function redrawTable_simple(historyData){
 
     // update data is very difficult
     // remove previous table make simple but become ugly
@@ -535,7 +535,7 @@ function redrawTable(historyData){
 }
 
 // redraw table data real d3.js
-function redrawTable_real(historyData){
+function redrawTable(historyData){
 
     // update data
     var tr = d3.select('tbody').selectAll('tr').data(historyData,function(d){return d.HISTORY_ID}).classed('editing',false)
@@ -548,14 +548,38 @@ function redrawTable_real(historyData){
     tr.exit().selectAll('td').transition().duration(1000).style('color',backgroundColor).remove()
 
     // make tabular data
-    // first  : from collection data enter tr with rows ( each tr's data = {'id':100, 'name':'ryu'....})
-    // second : very complicated
-    // 1. from object {'id':100, 'name':'ryu'}, make array like [{key:'id', value:100},{key:'name', value:'ryu'}]
-    // 2. enter above array data to td
+    // 1. from collection data enter tr with rows ( each tr's data = {'id':100, 'name':'ryu'....})
+    // 2. very complicated (refer to extractRow and colnames)
+    //    1) from object {'id':100, 'name':'ryu'}, make array like [{key:'id', value:100},{key:'name', value:'ryu'}]
+    //    2) enter above array data to td
+    
+    colnames = ['CRGR_NM', 'CO_NM', 'SRT_DTTM', 'END_DTTM', 'TASK']
+    var extractRow = function(rowObj){
+        console.log(rowObj)
+        return colnames.map(function(colname){
+            return {colname : colname, value : rowObj[colname]}
+        })
+    }
 
     var transitionForTR = d3.transition().duration(1000)
     tr = tr.enter().append('tr').attr('history_id', getValue('HISTORY_ID')) 
-    tr.selectAll('td').data(function(d,i){return d}).append('td')
+    tr.selectAll('td').data(extractRow).enter().append('td').text(function(d){return d.value})
+   
+    tr.append('td')
+    .append('img').attr('tabindex','0').attr('class','uptHistory')
+    .attr('history_id',getValue('HISTORY_ID')).attr('src','/images/glyphicons-199-ok-circle.png')
+
+    tr.append('td')
+    .append('img').attr('tabindex','0').attr('class','delHistory')
+    .attr('history_id',getValue('HISTORY_ID')).attr('src','/images/glyphicons-198-remove-circle.png')
+
+    d3.select('tbody').selectAll('tr').each(function(parentData,index){
+        d3.select(this) // must be tr
+        .selectAll('td')
+        .attr('crgr_id', function(d,i){
+            return parentData.CRGR_ID;
+        })
+    })
     /*
     tr.append('td').attr('crgr_id', getValue('CRGR_ID')).text(getValue('CRGR_NM'))
     .style('color',backgroundColor).transition(transitionForTR).style('color','white')
