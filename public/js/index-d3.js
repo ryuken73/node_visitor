@@ -507,6 +507,7 @@ function redrawTable_simple(historyData){
     // revmoe data
     var backgroundColor = d3.select('body').style('background-color')
     tr.exit().selectAll('td').transition().duration(1000).style('color',backgroundColor).remove()
+    
 
     // new data
     var transitionForTR = d3.transition().duration(500)
@@ -530,12 +531,13 @@ function redrawTable_simple(historyData){
       .append('img').attr('tabindex','0').attr('class','delHistory')
       .attr('history_id',getValue('HISTORY_ID')).attr('src','/images/glyphicons-198-remove-circle.png')
 
-    //tr.transition().duration(1000).style('color','yellow')    
-
 }
 
 // redraw table data real d3.js
 function redrawTable(historyData){
+    
+    var transitionForTR = d3.transition().duration(300)
+    var backgroundColor = d3.select('body').style('background-color')
 
     // update data
     var tr = d3.select('tbody').selectAll('tr').data(historyData,function(d){return d.HISTORY_ID}).classed('editing',false)
@@ -544,8 +546,10 @@ function redrawTable(historyData){
     d3.select('tbody').selectAll('tr').selectAll('td').classed('editing',false);
 
     // revmoe data
-    var backgroundColor = d3.select('body').style('background-color')
-    tr.exit().selectAll('td').transition().duration(1000).style('color',backgroundColor).remove()
+
+    var removeRows = tr.exit()
+    removeRows.selectAll('td').transition().duration(1000).style('color',backgroundColor).remove()
+    removeRows.transition().duration(1001).remove()
 
     // make tabular data
     // 1. from collection data enter tr with rows ( each tr's data = {'id':100, 'name':'ryu'....})
@@ -555,16 +559,18 @@ function redrawTable(historyData){
     
     colnames = ['CRGR_NM', 'CO_NM', 'SRT_DTTM', 'END_DTTM', 'TASK']
     var extractRow = function(rowObj){
-        console.log(rowObj)
         return colnames.map(function(colname){
             return {colname : colname, value : rowObj[colname]}
         })
     }
 
-    var transitionForTR = d3.transition().duration(1000)
+    // add new tr
     tr = tr.enter().append('tr').attr('history_id', getValue('HISTORY_ID')) 
-    tr.selectAll('td').data(extractRow).enter().append('td').text(function(d){return d.value})
-   
+
+    // add new td with data object {colname:'xxx', value:'yy'}
+    tr.selectAll('td').data(extractRow).enter().append('td').text(function(d){return d.value})    
+
+    // add new td with no data ( just have image )
     tr.append('td')
     .append('img').attr('tabindex','0').attr('class','uptHistory')
     .attr('history_id',getValue('HISTORY_ID')).attr('src','/images/glyphicons-199-ok-circle.png')
@@ -573,36 +579,17 @@ function redrawTable(historyData){
     .append('img').attr('tabindex','0').attr('class','delHistory')
     .attr('history_id',getValue('HISTORY_ID')).attr('src','/images/glyphicons-198-remove-circle.png')
 
-    d3.select('tbody').selectAll('tr').each(function(parentData,index){
-        d3.select(this) // must be tr
-        .selectAll('td')
-        .attr('crgr_id', function(d,i){
-            return parentData.CRGR_ID;
-        })
-    })
-    /*
-    tr.append('td').attr('crgr_id', getValue('CRGR_ID')).text(getValue('CRGR_NM'))
-    .style('color',backgroundColor).transition(transitionForTR).style('color','white')
-    tr.append('td').attr('co_id', getValue('CO_ID')).text(getValue('CO_NM'))
-    .style('color',backgroundColor).transition(transitionForTR).style('color','white')
-    tr.append('td').attr('class','startTime').attr('contentEditable','true').text(getValue('SRT_DTTM'))
-    .style('color',backgroundColor).transition(transitionForTR).style('color','white')
-    tr.append('td').attr('class','endTime').attr('contentEditable','true').text(getValue('END_DTTM'))    
-    .style('color',backgroundColor).transition(transitionForTR).style('color','white')
-    tr.append('td').attr('class','td_task').attr('contentEditable','true').text(getValue('TASK'))  
-    .style('color',backgroundColor).transition(transitionForTR).style('color','white')
+    tr.selectAll('td').style('color',backgroundColor).transition(transitionForTR).style('color','white')
 
-    tr.append('td')
-      .append('img').attr('tabindex','0').attr('class','uptHistory')
-      .attr('history_id',getValue('HISTORY_ID')).attr('src','/images/glyphicons-199-ok-circle.png')
-
-    tr.append('td')
-      .append('img').attr('tabindex','0').attr('class','delHistory')
-      .attr('history_id',getValue('HISTORY_ID')).attr('src','/images/glyphicons-198-remove-circle.png')
-    */
-
-    //tr.transition().duration(1000).style('color','yellow')    
-
+    tr.each(function(parentData,index){
+        var eachTR = d3.select(this) // must be tr
+        eachTR.selectAll('td').filter(function(d,i){if(i==0) return true}).attr('crgr_id', function(d,i){ return parentData.CRGR_ID;})        
+        eachTR.selectAll('td').filter(function(d,i){if(i==1) return true}).attr('co_id', function(d,i){ return parentData.CO_ID;})
+        eachTR.selectAll('td').filter(function(d,i){if(i==2) return true}).attr('class', 'startTime').attr('contentEditable','true')
+        eachTR.selectAll('td').filter(function(d,i){if(i==3) return true}).attr('class', 'endTime').attr('contentEditable','true')
+        eachTR.selectAll('td').filter(function(d,i){if(i==4) return true}).attr('class', 'td_task').attr('contentEditable','true')
+    })   
+    
 }
 
 
