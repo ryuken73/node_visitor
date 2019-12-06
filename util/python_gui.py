@@ -32,7 +32,7 @@ class App2() :
         print '*' * 10
         '''
         event.char : number, alphabet, hangul wangung
-        event.keysym : number, alphabet, ?? // encoding 문제일지도
+        event.keysym : number, alphabet, ?? // encoding 
         event.keycode : keycode
        '''
         print event.char
